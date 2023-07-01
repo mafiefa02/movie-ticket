@@ -8,6 +8,13 @@ const nextConfig = {
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: "image.tmdb.org",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;
