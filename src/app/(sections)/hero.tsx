@@ -45,16 +45,21 @@ interface tmdbMovieType {
 
 interface HeroProps { movie: Movie, tmdbMovieAPI: tmdbResponse }
 export default function Hero({ movie, tmdbMovieAPI }: HeroProps) {
+    const [featuredMovie, setFeaturedMovie] = React.useState<tmdbMovieType[]>([])
     const { data, isLoading, isError, error } = useQuery<tmdbResponse, Error>({
         queryKey: ["movies", movie.title],
         queryFn: () => getMovieByTitle(movie.title),
         initialData: tmdbMovieAPI
     })
 
+    useEffect(() => {
+        if (!data) return
+        setFeaturedMovie(data.results.slice(0, 1))
+    }, [data])
+
     if (isLoading) return <p>Loading...</p>
     if (isError) return <p>{error.message}</p>
 
-    const tmdbMovie = data.results.slice(0, 1)
 
     return (
         <Container className="h-[70vh]">
@@ -62,7 +67,7 @@ export default function Hero({ movie, tmdbMovieAPI }: HeroProps) {
                 <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-t from-background to-transparent" />
                 <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-tr from-background to-transparent" />
                 {
-                    tmdbMovie.map((tmdbMovie) => {
+                    featuredMovie.map((tmdbMovie) => {
                         return <Image key={movie.title} src={`https://image.tmdb.org/t/p/original/${tmdbMovie.backdrop_path}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
                     })
                 }
