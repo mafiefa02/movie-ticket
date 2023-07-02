@@ -1,7 +1,11 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
-function getWindowDimensions() {
-    if (typeof window === 'undefined') return ({ width: 0, height: 0 })
+interface WindowDimensions {
+    width: number | undefined,
+    height: number | undefined
+}
+
+function getWindowDimensions(): WindowDimensions {
     const { innerWidth: width, innerHeight: height } = window;
     return {
         width,
@@ -10,7 +14,10 @@ function getWindowDimensions() {
 }
 
 export function useWindowDimensions() {
-    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+    const [windowDimensions, setWindowDimensions] = useState<WindowDimensions>({ width: undefined, height: undefined });
+    useEffect(() => {
+        setWindowDimensions(getWindowDimensions());
+    }, [])
 
     useLayoutEffect(() => {
         function handleResize() {

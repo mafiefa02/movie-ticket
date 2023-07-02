@@ -41,7 +41,7 @@ interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 const NavbarContainer = ({ className, children, ...props }: NavbarProps) => {
     const { scrolled } = useNavbar()
-    return <div className={cn("sticky backdrop-blur-2xl bg-background/10 backdrop-contrast-75 backdrop-brightness-150 top-0 w-full transition ease-in z-50", scrolled && 'shadow-lg border-b bg-background/80 backdrop-contrast-100 backdrop-brightness-100', className)} {...props}>{children}</div>
+    return <div className={cn("sticky backdrop-blur-2xl bg-background/30 backdrop-contrast-75 backdrop-brightness-200 top-0 w-full transition ease-in z-50", scrolled && 'shadow-lg border-b bg-background/80 backdrop-contrast-100 backdrop-brightness-100', className)} {...props}>{children}</div>
 }
 
 const NavbarContent = ({ className, children, ...props }: NavbarProps) => {
@@ -69,7 +69,7 @@ const NavbarLink = ({ className, children, href, ...props }: NavbarLinkProps) =>
         <Button {...props}
             variant={"link"}
             className={
-                cn("hover:cursor-pointer text-foreground",
+                cn("hover:cursor-pointer drop-shadow-2xl text-foreground",
                     active && "underline",
                     className)
             }
@@ -113,8 +113,22 @@ const NavbarSideMenu = ({ className, children, ...props }: NavbarProps) => {
 
 export default function Navbar() {
     const { width } = useWindowDimensions()
-    const isMobile = width <= 640
 
+    // Server-side rendering
+    if (!width) return (
+        <NavbarContainer>
+            <NavbarContent>
+                <NavbarBrand src={logo} alt="logo" width={32} height={32}>
+                    <p className="text-lg text-primary text-left font-bold">XVI Cinema.</p>
+                </NavbarBrand>
+                <NavbarSideMenu>
+                    <UserAction loginText="Sign In" />
+                </NavbarSideMenu>
+            </NavbarContent>
+        </NavbarContainer>
+    )
+
+    const isMobile = width <= 640
     return (
         <NavbarContainer>
             <NavbarContent>
