@@ -1,34 +1,49 @@
 "use client"
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
+import Container from "@/components/layout/container";
+import { H1, P } from "@/components/typography";
+import { Button } from "@/components/ui/button";
 import { Movie } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
-async function getMovies() {
-    const res = await fetch("/api/movies")
-
-    const movies = await res.json()
-    return movies
+async function getMovieByTitle(title: string) {
+    const titleURL = encodeURIComponent(title);
+    const data = await fetch(`/api/movies/get-movies-by-title/`, {
+        headers: {
+            title: titleURL
+        }
+    }).then((res) => res.json());
+    return data
 }
 
-export default function Hero({ movies }: { movies: Movie[] }) {
-    const { data, isLoading, isError, error } = useQuery<Movie[], Error>({
-        queryKey: ["movies"],
-        queryFn: getMovies,
-        initialData: movies,
+interface HeroProps { movie: Movie, backdrop: string }
+export default function Hero({ movie, backdrop }: HeroProps) {
+    const { data, isLoading, isError, error } = useQuery<string, Error>({
+        queryKey: ["movies", movie.title],
+        queryFn: () => getMovieByTitle(movie.title),
+        initialData: backdrop
     })
 
     if (isLoading) return <p>Loading...</p>
     if (isError) return <p>{error.message}</p>
 
     return (
-        <section id="hero" className="absolute bg-red-50 left-0 top-0 w-full h-screen">
-            {data.map((movie) => {
-                return (
-                    <Image key={movie.id} src={movie.poster_url} alt={movie.title} width={50} height={50} />
-                )
-            })}
-        </section>
+        <Container className="h-[70vh]">
+            <div className="absolute left-0 top-0 w-full h-screen -z-50">
+                <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-t from-background to-transparent" />
+                <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-tr from-background to-transparent" />
+                <Image src={`https://image.tmdb.org/t/p/original/${data}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
+            </div>
+            <div className="relative max-w-sm md:max-w-xl flex flex-col items-start justify-end h-full">
+                <H1 className="text-primary">{movie.title}</H1>
+                <P className="line-clamp-4 text-foreground/20 text-lg">{movie.description}</P>
+                <div className="flex flex-row items-center w-full gap-px sm:gap-4 mt-8">
+                    <Button className="sm:w-1/2">Nonton Sekarang</Button>
+                    <Button className="justify-start sm:w-1/2" variant="link">Lihat Sinopsis</Button>
+                </div>
+            </div>
+        </Container>
     )
 }

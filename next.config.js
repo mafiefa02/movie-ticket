@@ -14,6 +14,9 @@ const nextConfig = {
       {
         hostname: "image.tmdb.org",
       },
+      {
+        hostname: "img.youtube.com",
+      },
     ],
   },
 };
