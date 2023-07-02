@@ -9,10 +9,9 @@ import { Movie } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
 async function getMovieByTitle(title: string) {
-    const titleURL = encodeURIComponent(title);
     const data = await fetch(`/api/movies/get-movies-by-title/`, {
         headers: {
-            title: titleURL
+            title: title
         }
     }).then((res) => res.json());
     return data
