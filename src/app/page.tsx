@@ -28,7 +28,7 @@ async function getMovieByTitle(title: string) {
 
 export default async function Home() {
   const movies: Movie[] = await getMovies()
-  const random = Math.floor((Math.random() * movies.length))
+  const random = Math.floor((Math.random() * (movies.length - 1)))
   const movie = movies[random]
   const featuredMovie = await getMovieByTitle(movie.title)
   const backdrop = featuredMovie.results[0].backdrop_path as string
