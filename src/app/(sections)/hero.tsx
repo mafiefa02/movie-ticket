@@ -82,7 +82,6 @@ export default function Hero({ movie }: { movie: Movie }) {
     return (
         <>
             {
-                data.results &&
                 <Container className="h-[70vh]">
                     <div className="absolute left-0 top-0 w-full h-screen -z-50">
                         <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-t from-background to-transparent" />
