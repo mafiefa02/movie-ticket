@@ -54,7 +54,8 @@ export default function Hero({ movie, tmdbMovieAPI }: HeroProps) {
 
     useEffect(() => {
         if (!data) return
-        setFeaturedMovie(data.results.slice(0, 1))
+        const movie = data.results.slice(0, 1)
+        setFeaturedMovie(movie)
     }, [data])
 
     if (isLoading) return <p>Loading...</p>
