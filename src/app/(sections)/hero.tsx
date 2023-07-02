@@ -70,13 +70,12 @@ export default function Hero({ movie }: { movie: Movie }) {
     )
     if (isError) return <p>{error.message}</p>
 
-    const featuredMovie = data?.results
     return (
         <Container className="h-[70vh]">
             <div className="absolute left-0 top-0 w-full h-screen -z-50">
                 <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-t from-background to-transparent" />
                 <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-tr from-background to-transparent" />
-                {featuredMovie && <Image key={movie.title} src={`https://image.tmdb.org/t/p/original/${featuredMovie[0].backdrop_path}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />}
+                <Image key={movie.title} src={`https://image.tmdb.org/t/p/original/${data.results[0].backdrop_path}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
             </div>
             <div className="relative max-w-sm md:max-w-xl flex flex-col items-start justify-end h-full">
                 <H1 className="text-primary">{movie.title}</H1>
