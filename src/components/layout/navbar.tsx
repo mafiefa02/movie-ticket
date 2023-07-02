@@ -41,7 +41,7 @@ interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 const NavbarContainer = ({ className, children, ...props }: NavbarProps) => {
     const { scrolled } = useNavbar()
-    return <div className={cn("sticky backdrop-blur-2xl bg-background/30 backdrop-contrast-75 backdrop-brightness-200 top-0 w-full transition ease-in z-50", scrolled && 'shadow-lg border-b bg-background/80 backdrop-contrast-100 backdrop-brightness-100', className)} {...props}>{children}</div>
+    return <div className={cn("sticky backdrop-blur-2xl bg-background/30 backdrop-contrast-75 dark:backdrop-brightness-75 backdrop-brightness-200 top-0 w-full transition ease-in z-50", scrolled && 'shadow-lg border-b bg-background/80 backdrop-contrast-100 backdrop-brightness-100', className)} {...props}>{children}</div>
 }
 
 const NavbarContent = ({ className, children, ...props }: NavbarProps) => {
@@ -169,16 +169,14 @@ export default function Navbar() {
                                 </SheetHeader>
                                 <NavbarContent className="flex-col gap-4 px-0 items-start">
                                     <NavbarLink href="/">Home</NavbarLink>
-                                    <NavbarLink href="/materi">Materi</NavbarLink>
+                                    <NavbarLink href="/now-playing">Now Playing</NavbarLink>
                                     <NavbarDropdown
                                         tabIndex={0}
                                         orientation="vertical"
-                                        trigger="Tentang Kami">
-                                        <NavbarDropdownLink href="/#latar-belakang">Latar Belakang</NavbarDropdownLink>
-                                        <NavbarDropdownLink href="/#visi-misi">Visi dan Misi</NavbarDropdownLink>
-                                        <NavbarDropdownLink href="/#organogram">Organogram</NavbarDropdownLink>
+                                        trigger="Profile">
+                                        <NavbarDropdownLink href="/profile#watch-history">Watch History</NavbarDropdownLink>
+                                        <NavbarDropdownLink href="/profile#topup-history">Topup History</NavbarDropdownLink>
                                     </NavbarDropdown>
-                                    <NavbarLink href="/leaderboard">Leaderboard</NavbarLink>
                                 </NavbarContent>
                             </SheetContent>
                         </Sheet>
