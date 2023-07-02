@@ -30,7 +30,7 @@ async function getMovieByTitle(title: string) {
     options
   ).then((res) => res.json());
 
-  if (!res.results) {
+  if (res.results === undefined || res.results.length === 0) {
     return null
   }
 
