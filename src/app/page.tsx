@@ -56,16 +56,12 @@ export default async function Home() {
   const movies: Movie[] = await getMovies()
   const random = Math.floor((Math.random() * (movies.length - 1)))
   const movie = movies[random]
-  const queryClient = getQueryClient()
-  await queryClient.prefetchQuery(['movies', movie.title], () => getMovieByTitle(movie.title))
-  const dehydratedState = dehydrate(queryClient)
+  const tmdbMovie = await getMovieByTitle(movie.title)
 
   return (
     <>
       <Navbar />
-      <Hydrate state={dehydratedState}>
-        <Hero movie={movie} />
-      </Hydrate>
+      <Hero movie={movie} tmdbMovie={tmdbMovie} />
       <NowPlaying movies={movies} />
     </>
   )

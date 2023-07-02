@@ -44,12 +44,12 @@ interface tmdbMovieType {
     "vote_count": number
 }
 
-export default function Hero({ movie }: { movie: Movie }) {
+export default function Hero({ movie, tmdbMovie }: { movie: Movie, tmdbMovie: tmdbResponse }) {
     // const [movieData, setMovieData] = React.useState<tmdbResponse | undefined>(undefined)
-    const { data, isLoading, isError, error } = useQuery<tmdbResponse, Error>({
+    /*const { data, isLoading, isError, error } = useQuery<tmdbResponse, Error>({
         queryKey: ["movies", movie.title],
         queryFn: () => getMovieByTitle(movie.title),
-    })
+    })*/
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     /*useEffect(() => {
@@ -59,7 +59,7 @@ export default function Hero({ movie }: { movie: Movie }) {
         }
     })*/
 
-    if (isLoading) return (
+    /*if (isLoading) return (
         <Container className="h-[70vh]">
             <div className="absolute left-0 top-0 w-full h-screen -z-50">
                 <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-t from-background to-transparent" />
@@ -77,7 +77,7 @@ export default function Hero({ movie }: { movie: Movie }) {
         </Container>
     )
 
-    if (isError) return <p>{error.message}</p>
+    if (isError) return <p>{error.message}</p>*/
 
     return (
         <>
@@ -86,7 +86,7 @@ export default function Hero({ movie }: { movie: Movie }) {
                     <div className="absolute left-0 top-0 w-full h-screen -z-50">
                         <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-t from-background to-transparent" />
                         <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-tr from-background to-transparent" />
-                        <Image key={movie.title} src={`https://image.tmdb.org/t/p/original/${data.results[0].backdrop_path}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
+                        <Image key={movie.title} src={`https://image.tmdb.org/t/p/original/${tmdbMovie.results[0].backdrop_path}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
                     </div>
                     <div className="relative max-w-sm md:max-w-xl flex flex-col items-start justify-end h-full">
                         <H1 className="text-primary">{movie.title}</H1>
