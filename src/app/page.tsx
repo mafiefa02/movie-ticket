@@ -4,6 +4,12 @@ import { Movie } from "@prisma/client";
 import Hero from "./(sections)/hero";
 import NowPlaying from "./(sections)/now-playing";
 
+interface tmdbResponse {
+  page: number,
+  results: tmdbMovieType[],
+  total_pages: number,
+  total_results: number
+}
 interface tmdbMovieType {
   "adult": boolean,
   "backdrop_path": string,
@@ -28,7 +34,7 @@ async function getMovies() {
   return movies
 }
 
-async function getMovieByTitle(title: string): Promise<tmdbMovieType[]> {
+async function getMovieByTitle(title: string): Promise<tmdbResponse> {
   const titleURL = title.replace(" ", "%20").replace("&", "%26");
   const movieBackdrop = await fetch(
     `https://api.themoviedb.org/3/search/movie?query=${titleURL}`, {
@@ -39,7 +45,7 @@ async function getMovieByTitle(title: string): Promise<tmdbMovieType[]> {
   }
   ).then((res) => res.json());
 
-  return movieBackdrop.results
+  return movieBackdrop
 }
 
 
@@ -52,7 +58,7 @@ export default async function Home() {
   return (
     <>
       <Navbar />
-      <Hero movie={movie} tmdbMovie={featuredMovie} />
+      <Hero movie={movie} tmdbMovieAPI={featuredMovie} />
       <NowPlaying movies={movies} />
     </>
   )

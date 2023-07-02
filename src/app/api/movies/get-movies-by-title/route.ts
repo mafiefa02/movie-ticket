@@ -17,5 +17,5 @@ export async function GET(req: NextRequest) {
     }
   ).then((res) => res.json());
 
-  return NextResponse.json(movieBackdrop.results);
+  return NextResponse.json(movieBackdrop);
 }

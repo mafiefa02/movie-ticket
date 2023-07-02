@@ -14,7 +14,16 @@ async function getMovieByTitle(title: string) {
             title: title
         }
     }).then((res) => res.json());
-    return data
+
+    const result = await data
+    return result
+}
+
+interface tmdbResponse {
+    page: number,
+    results: tmdbMovieType[],
+    total_pages: number,
+    total_results: number
 }
 
 interface tmdbMovieType {
@@ -34,23 +43,25 @@ interface tmdbMovieType {
     "vote_count": number
 }
 
-interface HeroProps { movie: Movie, tmdbMovie: tmdbMovieType[] }
-export default function Hero({ movie, tmdbMovie }: HeroProps) {
-    const { data, isLoading, isError, error } = useQuery<tmdbMovieType[], Error>({
+interface HeroProps { movie: Movie, tmdbMovieAPI: tmdbResponse }
+export default function Hero({ movie, tmdbMovieAPI }: HeroProps) {
+    const { data, isLoading, isError, error } = useQuery<tmdbResponse, Error>({
         queryKey: ["movies", movie.title],
         queryFn: () => getMovieByTitle(movie.title),
-        initialData: tmdbMovie
+        initialData: tmdbMovieAPI
     })
 
     if (isLoading) return <p>Loading...</p>
     if (isError) return <p>{error.message}</p>
+
+    const tmdbMovie = data.results[0]
 
     return (
         <Container className="h-[70vh]">
             <div className="absolute left-0 top-0 w-full h-screen -z-50">
                 <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-t from-background to-transparent" />
                 <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-tr from-background to-transparent" />
-                <Image src={`https://image.tmdb.org/t/p/original/${data[0].backdrop_path}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
+                <Image src={`https://image.tmdb.org/t/p/original/${tmdbMovie.backdrop_path}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
             </div>
             <div className="relative max-w-sm md:max-w-xl flex flex-col items-start justify-end h-full">
                 <H1 className="text-primary">{movie.title}</H1>
