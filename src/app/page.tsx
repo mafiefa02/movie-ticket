@@ -1,11 +1,6 @@
-import { useState } from "react";
-
 import Navbar from "@/components/layout/navbar";
-import getQueryClient from "@/lib/get-query-client";
-import { Hydrate } from "@/lib/hydrate";
-import { tmdbMovie, tmdbResponse } from "@/types/tmdb";
+import { tmdbResponse } from "@/types/tmdb";
 import { Movie } from "@prisma/client";
-import { dehydrate } from "@tanstack/react-query";
 
 import Hero from "./(sections)/hero";
 import NowPlaying from "./(sections)/now-playing";

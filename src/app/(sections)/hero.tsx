@@ -1,13 +1,13 @@
 "use client"
-import { Loader2Icon } from "lucide-react";
+
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React from "react";
 
 import Container from "@/components/layout/container";
 import { H1, P } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { tmdbMovie, tmdbResponse } from "@/types/tmdb";
+import { tmdbMovie } from "@/types/tmdb";
 import { Movie } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
