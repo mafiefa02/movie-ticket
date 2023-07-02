@@ -45,7 +45,7 @@ interface tmdbMovieType {
 }
 
 export default function Hero({ movie }: { movie: Movie }) {
-    const [movieData, setMovieData] = React.useState<tmdbMovieType | undefined>(undefined)
+    const [movieData, setMovieData] = React.useState<tmdbResponse | undefined>(undefined)
     const { data, isLoading, isError, error } = useQuery<tmdbResponse, Error>({
         queryKey: ["movies", movie.title],
         queryFn: () => getMovieByTitle(movie.title),
@@ -54,8 +54,8 @@ export default function Hero({ movie }: { movie: Movie }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (data) {
-            setMovieData(data.results[0])
-            console.log('set', data.results[0])
+            setMovieData(data)
+            console.log('set', data)
         }
     })
 
@@ -80,20 +80,25 @@ export default function Hero({ movie }: { movie: Movie }) {
     if (isError) return <p>{error.message}</p>
 
     return (
-        <Container className="h-[70vh]">
-            <div className="absolute left-0 top-0 w-full h-screen -z-50">
-                <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-t from-background to-transparent" />
-                <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-tr from-background to-transparent" />
-                <Image key={movie.title} src={`https://image.tmdb.org/t/p/original/${data.results[0].backdrop_path}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
-            </div>
-            <div className="relative max-w-sm md:max-w-xl flex flex-col items-start justify-end h-full">
-                <H1 className="text-primary">{movie.title}</H1>
-                <P className="line-clamp-4 text-foreground/20 text-lg">{movie.description}</P>
-                <div className="flex flex-row items-center w-full gap-px sm:gap-4 mt-8">
-                    <Button className="sm:w-1/2">Nonton Sekarang</Button>
-                    <Button className="justify-start sm:w-1/2" variant="link">Lihat Sinopsis</Button>
-                </div>
-            </div>
-        </Container>
+        <>
+            {
+                data.results &&
+                <Container className="h-[70vh]">
+                    <div className="absolute left-0 top-0 w-full h-screen -z-50">
+                        <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-t from-background to-transparent" />
+                        <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-tr from-background to-transparent" />
+                        <Image key={movie.title} src={`https://image.tmdb.org/t/p/original/${data.results[0].backdrop_path}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
+                    </div>
+                    <div className="relative max-w-sm md:max-w-xl flex flex-col items-start justify-end h-full">
+                        <H1 className="text-primary">{movie.title}</H1>
+                        <P className="line-clamp-4 text-foreground/20 text-lg">{movie.description}</P>
+                        <div className="flex flex-row items-center w-full gap-px sm:gap-4 mt-8">
+                            <Button className="sm:w-1/2">Nonton Sekarang</Button>
+                            <Button className="justify-start sm:w-1/2" variant="link">Lihat Sinopsis</Button>
+                        </div>
+                    </div>
+                </Container>
+            }
+        </>
     )
 }
