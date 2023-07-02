@@ -9,10 +9,10 @@ import { Movie } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
 async function getMovies() {
-    const res = await fetch("/api/movies")
-
-    const movies = await res.json()
-    return movies
+    const movies: { result: Movie[] } = await fetch(
+        "/api/movies"
+    ).then((res) => res.json());
+    return movies.result
 }
 
 export default function NowPlaying({ movies }: { movies: Movie[] }) {
