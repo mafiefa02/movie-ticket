@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 
 import Container from "@/components/layout/container";
 import { H1, P } from "@/components/typography";
@@ -18,12 +18,29 @@ async function getMovieByTitle(title: string) {
     return data
 }
 
-interface HeroProps { movie: Movie, backdrop: string }
-export default function Hero({ movie, backdrop }: HeroProps) {
-    const { data, isLoading, isError, error } = useQuery<string, Error>({
+interface tmdbMovieType {
+    "adult": boolean,
+    "backdrop_path": string,
+    "genre_ids": number[],
+    "id": number,
+    "original_language": string,
+    "original_title": string,
+    "overview": string,
+    "popularity": number,
+    "poster_path": string,
+    "release_date": string,
+    "title": string,
+    "video": boolean,
+    "vote_average": number,
+    "vote_count": number
+}
+
+interface HeroProps { movie: Movie, tmdbMovie: tmdbMovieType[] }
+export default function Hero({ movie, tmdbMovie }: HeroProps) {
+    const { data, isLoading, isError, error } = useQuery<tmdbMovieType[], Error>({
         queryKey: ["movies", movie.title],
         queryFn: () => getMovieByTitle(movie.title),
-        initialData: backdrop
+        initialData: tmdbMovie
     })
 
     if (isLoading) return <p>Loading...</p>
@@ -34,7 +51,7 @@ export default function Hero({ movie, backdrop }: HeroProps) {
             <div className="absolute left-0 top-0 w-full h-screen -z-50">
                 <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-t from-background to-transparent" />
                 <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-tr from-background to-transparent" />
-                <Image src={`https://image.tmdb.org/t/p/original/${data}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
+                <Image src={`https://image.tmdb.org/t/p/original/${data[0].backdrop_path}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
             </div>
             <div className="relative max-w-sm md:max-w-xl flex flex-col items-start justify-end h-full">
                 <H1 className="text-primary">{movie.title}</H1>
