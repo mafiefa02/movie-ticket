@@ -53,12 +53,11 @@ export default async function Home() {
   const movies: Movie[] = await getMovies()
   const random = Math.floor((Math.random() * (movies.length - 1)))
   const movie = movies[random]
-  const featuredMovie = await getMovieByTitle(movie.title)
 
   return (
     <>
       <Navbar />
-      <Hero movie={movie} tmdbMovieAPI={featuredMovie} />
+      <Hero movie={movie} />
       <NowPlaying movies={movies} />
     </>
   )

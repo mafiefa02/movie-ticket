@@ -1,10 +1,12 @@
 "use client"
+import { Loader2Icon } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect } from "react";
 
 import Container from "@/components/layout/container";
 import { H1, P } from "@/components/typography";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Movie } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
@@ -43,18 +45,32 @@ interface tmdbMovieType {
     "vote_count": number
 }
 
-interface HeroProps { movie: Movie, tmdbMovieAPI: tmdbResponse }
-export default function Hero({ movie, tmdbMovieAPI }: HeroProps) {
+export default function Hero({ movie }: { movie: Movie }) {
     const { data, isLoading, isError, error } = useQuery<tmdbResponse, Error>({
         queryKey: ["movies", movie.title],
         queryFn: () => getMovieByTitle(movie.title),
-        initialData: tmdbMovieAPI
     })
 
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return (
+        <Container className="h-[70vh]">
+            <div className="absolute left-0 top-0 w-full h-screen -z-50">
+                <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-t from-background to-transparent" />
+                <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-tr from-background to-transparent" />
+                <Skeleton className="w-full h-full" />
+            </div>
+            <div className="relative max-w-sm md:max-w-xl flex flex-col items-start justify-end h-full">
+                <H1 className="text-primary">{movie.title}</H1>
+                <P className="line-clamp-4 text-foreground/20 text-lg">{movie.description}</P>
+                <div className="flex flex-row items-center w-full gap-px sm:gap-4 mt-8">
+                    <Button className="sm:w-1/2">Nonton Sekarang</Button>
+                    <Button className="justify-start sm:w-1/2" variant="link">Lihat Sinopsis</Button>
+                </div>
+            </div>
+        </Container>
+    )
     if (isError) return <p>{error.message}</p>
-    const featuredMovie = data?.results
 
+    const featuredMovie = data?.results
     return (
         <Container className="h-[70vh]">
             <div className="absolute left-0 top-0 w-full h-screen -z-50">
