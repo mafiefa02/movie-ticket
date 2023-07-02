@@ -45,7 +45,7 @@ interface tmdbMovieType {
 }
 
 export default function Hero({ movie }: { movie: Movie }) {
-    const [movieData, setMovieData] = React.useState<tmdbResponse | undefined>(undefined)
+    const [movieData, setMovieData] = React.useState<tmdbMovieType | undefined>(undefined)
     const { data, isLoading, isError, error } = useQuery<tmdbResponse, Error>({
         queryKey: ["movies", movie.title],
         queryFn: () => getMovieByTitle(movie.title),
@@ -54,9 +54,11 @@ export default function Hero({ movie }: { movie: Movie }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (data) {
-            setMovieData(data)
+            setMovieData(data.results[0])
+            console.log('set', data.results[0])
         }
     })
+
     if (isLoading || movieData === undefined) return (
         <Container className="h-[70vh]">
             <div className="absolute left-0 top-0 w-full h-screen -z-50">
@@ -74,6 +76,7 @@ export default function Hero({ movie }: { movie: Movie }) {
             </div>
         </Container>
     )
+
     if (isError) return <p>{error.message}</p>
 
     return (
