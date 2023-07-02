@@ -37,7 +37,7 @@ async function getMovies() {
   return movies
 }
 
-async function getMovieByTitle(title: string): Promise<tmdbResponse> {
+async function getMovieByTitle(title: string) {
   const titleURL = title.replace(" ", "%20").replace("&", "%26");
   const movieBackdrop = await fetch(
     `https://api.themoviedb.org/3/search/movie?query=${titleURL}`, {
@@ -48,7 +48,9 @@ async function getMovieByTitle(title: string): Promise<tmdbResponse> {
   }
   ).then((res) => res.json());
 
-  return movieBackdrop
+  const returnValue = movieBackdrop.results[0]
+
+  return returnValue
 }
 
 

@@ -44,7 +44,7 @@ interface tmdbMovieType {
     "vote_count": number
 }
 
-export default function Hero({ movie, tmdbMovie }: { movie: Movie, tmdbMovie: tmdbResponse }) {
+export default function Hero({ movie, tmdbMovie }: { movie: Movie, tmdbMovie: tmdbMovieType }) {
     // const [movieData, setMovieData] = React.useState<tmdbResponse | undefined>(undefined)
     /*const { data, isLoading, isError, error } = useQuery<tmdbResponse, Error>({
         queryKey: ["movies", movie.title],
@@ -79,7 +79,7 @@ export default function Hero({ movie, tmdbMovie }: { movie: Movie, tmdbMovie: tm
 
     if (isError) return <p>{error.message}</p>*/
 
-    const image = tmdbMovie.results[0].backdrop_path
+    const image = tmdbMovie.backdrop_path
     return (
         <>
             {
