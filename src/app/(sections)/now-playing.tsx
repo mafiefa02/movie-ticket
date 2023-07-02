@@ -1,22 +1,16 @@
 "use client";
 import Container from "@/components/layout/container";
 import { H3 } from "@/components/typography";
+import { getMoviesClient } from "@/lib/client/fetch-utils";
 import { Movie } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
 import MovieCard from "./(components)/movie-card";
 
-async function getMovies() {
-  const movies: { result: Movie[] } = await fetch("/api/movies").then((res) =>
-    res.json()
-  );
-  return movies.result;
-}
-
 export default function NowPlaying({ movies }: { movies: Movie[] }) {
   const { data, isLoading, isError, error } = useQuery<Movie[], Error>({
     queryKey: ["movies"],
-    queryFn: getMovies,
+    queryFn: getMoviesClient,
     initialData: movies,
   });
 

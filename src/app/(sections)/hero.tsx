@@ -7,16 +7,9 @@ import Container from "@/components/layout/container";
 import { H1, P } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { tmdbMovie } from "@/types/tmdb";
+import { getMovieByTitleClient } from "@/lib/client/fetch-utils";
 import { Movie } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-
-async function getMovieByTitle(title: string) {
-  const data: { result: tmdbMovie } = await fetch(`/api/movies/${title}`).then(
-    (res) => res.json()
-  );
-  return data.result;
-}
 
 export default function Hero({
   movie,
@@ -28,7 +21,7 @@ export default function Hero({
   const { data, isLoading, isError, error } = useQuery<string, Error>({
     queryKey: ["backdrop", movie.title],
     queryFn: () =>
-      getMovieByTitle(movie.title).then((res) => res.backdrop_path),
+      getMovieByTitleClient(movie.title).then((res) => res.backdrop_path),
     initialData: backdrop,
   });
 
