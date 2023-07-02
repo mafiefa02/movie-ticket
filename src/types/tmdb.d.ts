@@ -1,7 +1,7 @@
 declare module "tmdb";
 export interface tmdbResponse {
   page: number;
-  results: tmdbMovieType[];
+  results: tmdbMovie[];
   total_pages: number;
   total_results: number;
 }

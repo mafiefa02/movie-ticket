@@ -30,11 +30,11 @@ async function getMovieByTitle(title: string) {
     options
   ).then((res) => res.json());
 
-  if (res.results.length === 0) {
+  if (!res.results) {
     return null
   }
 
-  return res.results[0] as tmdbMovie
+  return res.results[0]
 }
 
 
