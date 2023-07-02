@@ -45,7 +45,7 @@ interface tmdbMovieType {
 
 interface HeroProps { movie: Movie, tmdbMovieAPI: tmdbResponse }
 export default function Hero({ movie, tmdbMovieAPI }: HeroProps) {
-    const [featuredMovie, setFeaturedMovie] = React.useState<tmdbMovieType[]>([])
+    const [featuredMovie, setFeaturedMovie] = React.useState<tmdbMovieType[]>(tmdbMovieAPI.results)
     const { data, isLoading, isError, error } = useQuery<tmdbResponse, Error>({
         queryKey: ["movies", movie.title],
         queryFn: () => getMovieByTitle(movie.title),
@@ -54,9 +54,10 @@ export default function Hero({ movie, tmdbMovieAPI }: HeroProps) {
 
     useEffect(() => {
         if (data === undefined) return
-        const movie = data.results.slice(0, 1)
+        const movie = data.results.filter((movie) => movie.backdrop_path !== null)
         setFeaturedMovie(movie)
-    }, [data])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     if (isLoading) return <p>Loading...</p>
     if (isError) return <p>{error.message}</p>
@@ -67,11 +68,7 @@ export default function Hero({ movie, tmdbMovieAPI }: HeroProps) {
             <div className="absolute left-0 top-0 w-full h-screen -z-50">
                 <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-t from-background to-transparent" />
                 <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-tr from-background to-transparent" />
-                {
-                    featuredMovie.map((tmdbMovie) => {
-                        return <Image key={movie.title} src={`https://image.tmdb.org/t/p/original/${tmdbMovie.backdrop_path}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
-                    })
-                }
+                <Image key={movie.title} src={`https://image.tmdb.org/t/p/original/${featuredMovie[0].backdrop_path}`} alt={movie.title} fill style={{ objectFit: "cover", zIndex: -40 }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
             </div>
             <div className="relative max-w-sm md:max-w-xl flex flex-col items-start justify-end h-full">
                 <H1 className="text-primary">{movie.title}</H1>
