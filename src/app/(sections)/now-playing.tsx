@@ -36,7 +36,7 @@ export default function NowPlaying({ movies }: { movies: Movie[] }) {
                     {data.map((movie) => {
                         return (
                             <Card key={movie.title} className="w-max overflow-hidden">
-                                <Image src={movie.poster_url} alt={movie.title} width={isMobile ? 200 : 300} height={isMobile ? 300 : 450} style={{ objectFit: "cover" }} />
+                                <Image src={movie.poster_url} alt={movie.title} width={isMobile ? 200 : 300} height={isMobile ? 300 : 450} style={{ objectFit: "cover" }} placeholder="blur" blurDataURL={"process.env.BLUR_DATA_URL"} />
                             </Card>
                         )
                     })}
