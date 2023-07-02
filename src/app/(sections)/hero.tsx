@@ -53,7 +53,7 @@ export default function Hero({ movie, tmdbMovieAPI }: HeroProps) {
     })
 
     useEffect(() => {
-        if (!data) return
+        if (data === undefined) return
         const movie = data.results.slice(0, 1)
         setFeaturedMovie(movie)
     }, [data])
