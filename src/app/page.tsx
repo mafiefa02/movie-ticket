@@ -7,13 +7,15 @@ import { dehydrate } from "@tanstack/react-query";
 import Hero from "./(sections)/hero";
 
 async function getMovies() {
-  const movies = await prisma.movie.findMany()
+  const movies = await fetch(
+    "https://seleksi-sea-2023.vercel.app/api/movies"
+  ).then((res) => res.json());
   return movies
 }
 
 
 export default async function Home() {
-  const movies = await prisma.movie.findMany({ take: 10 })
+  const movies = await getMovies()
   return (
     <>
       <Navbar />
