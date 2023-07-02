@@ -33,6 +33,9 @@ export default function Hero({ movie, backdrop }: { movie: Movie, backdrop: stri
                 </div>
                 <div className="relative max-w-sm md:max-w-xl flex flex-col items-start justify-end h-full">
                     <H1 className="text-primary">{movie.title}</H1>
+                    <div className="flex flex-row w-full">
+                        <P>{movie.release_date}</P>
+                    </div>
                     <P className="line-clamp-4 text-foreground/20 text-lg">{movie.description}</P>
                     <div className="flex flex-row items-center w-full gap-px sm:gap-4 mt-8">
                         <Button className="sm:w-1/2">Nonton Sekarang</Button>
@@ -54,6 +57,9 @@ export default function Hero({ movie, backdrop }: { movie: Movie, backdrop: stri
                     </div>
                     <div className="relative max-w-sm md:max-w-xl flex flex-col items-start justify-end h-full">
                         <H1 className="text-primary">{movie.title}</H1>
+                        <div className="flex flex-row w-full justify-between">
+                            <P className="mt-2 -mb-3 text-xs opacity-50">Released <span className="font-bold inline">{movie.release_date}</span></P>
+                        </div>
                         <P className="line-clamp-4 text-foreground/20 text-lg">{movie.description}</P>
                         <div className="flex flex-row items-center w-full gap-px sm:gap-4 mt-8">
                             <Button className="sm:w-1/2">Nonton Sekarang</Button>
