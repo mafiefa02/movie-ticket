@@ -9,7 +9,7 @@ async function getMovies() {
   const movies: Movie[] = await fetch(
     "https://seleksi-sea-2023.vercel.app/api/movies"
   ).then((res) => res.json());
-  return movies
+  return movies;
 }
 
 async function getMovieByTitle(title: string) {
@@ -26,21 +26,20 @@ async function getMovieByTitle(title: string) {
   ).then((res) => res.json());
 
   if (res.results === undefined || res.results.length === 0) {
-    return null
+    return null;
   }
 
-  return res.results[0]
+  return res.results[0];
 }
 
-
 export default async function Home() {
-  const nowPlaying = await getMovies()
-  const random = Math.floor(Math.random() * nowPlaying.length)
-  const featured = nowPlaying[random]
+  const nowPlaying = await getMovies();
+  const random = Math.floor(Math.random() * nowPlaying.length);
+  const featured = nowPlaying[random];
   const featuredBackdrop = await getMovieByTitle(featured.title).then((res) => {
-    if (res === null) return featured.poster_url
-    return res.backdrop_path
-  })
+    if (res === null) return featured.poster_url;
+    return res.backdrop_path;
+  });
 
   return (
     <>
@@ -48,5 +47,5 @@ export default async function Home() {
       <Hero movie={featured} backdrop={featuredBackdrop} />
       <NowPlaying movies={nowPlaying} />
     </>
-  )
+  );
 }
