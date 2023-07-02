@@ -45,21 +45,21 @@ interface tmdbMovieType {
 }
 
 export default function Hero({ movie }: { movie: Movie }) {
-    const [movieData, setMovieData] = React.useState<tmdbResponse | undefined>(undefined)
+    // const [movieData, setMovieData] = React.useState<tmdbResponse | undefined>(undefined)
     const { data, isLoading, isError, error } = useQuery<tmdbResponse, Error>({
         queryKey: ["movies", movie.title],
         queryFn: () => getMovieByTitle(movie.title),
     })
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => {
+    /*useEffect(() => {
         if (data) {
             setMovieData(data)
             console.log('set', data)
         }
-    })
+    })*/
 
-    if (isLoading || movieData === undefined) return (
+    if (isLoading) return (
         <Container className="h-[70vh]">
             <div className="absolute left-0 top-0 w-full h-screen -z-50">
                 <div className="absolute left-0 top-0 w-full h-screen bg-gradient-to-t from-background to-transparent" />

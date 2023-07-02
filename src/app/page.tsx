@@ -1,5 +1,8 @@
 import Navbar from "@/components/layout/navbar";
+import getQueryClient from "@/lib/get-query-client";
+import { Hydrate } from "@/lib/hydrate";
 import { Movie } from "@prisma/client";
+import { dehydrate } from "@tanstack/react-query";
 
 import Hero from "./(sections)/hero";
 import NowPlaying from "./(sections)/now-playing";
@@ -53,11 +56,16 @@ export default async function Home() {
   const movies: Movie[] = await getMovies()
   const random = Math.floor((Math.random() * (movies.length - 1)))
   const movie = movies[random]
+  const queryClient = getQueryClient()
+  await queryClient.prefetchQuery(['movies', movie.title], () => getMovieByTitle(movie.title))
+  const dehydratedState = dehydrate(queryClient)
 
   return (
     <>
       <Navbar />
-      <Hero movie={movie} />
+      <Hydrate state={dehydratedState}>
+        <Hero movie={movie} />
+      </Hydrate>
       <NowPlaying movies={movies} />
     </>
   )
