@@ -17,8 +17,7 @@ async function getMovieByTitle(title: string) {
         }
     }).then((res) => res.json());
 
-    const result = await data
-    return result
+    return data
 }
 
 interface tmdbResponse {
