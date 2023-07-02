@@ -15,7 +15,10 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${process.env.TMDB_API_KEY}`,
       },
     }
-  ).then((res) => res.json());
+  ).then((res) => {
+    if (res.ok) return res.json();
+    else return { error: "Error fetching movie backdrop" };
+  });
 
   return NextResponse.json(movieBackdrop);
 }

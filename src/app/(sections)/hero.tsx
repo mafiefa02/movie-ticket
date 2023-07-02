@@ -45,22 +45,15 @@ interface tmdbMovieType {
 
 interface HeroProps { movie: Movie, tmdbMovieAPI: tmdbResponse }
 export default function Hero({ movie, tmdbMovieAPI }: HeroProps) {
-    const [featuredMovie, setFeaturedMovie] = React.useState<tmdbMovieType[]>(tmdbMovieAPI.results)
     const { data, isLoading, isError, error } = useQuery<tmdbResponse, Error>({
         queryKey: ["movies", movie.title],
         queryFn: () => getMovieByTitle(movie.title),
         initialData: tmdbMovieAPI
     })
 
-    useEffect(() => {
-        if (data === undefined) return
-        const movie = data.results.filter((movie) => movie.backdrop_path !== null)
-        setFeaturedMovie(movie)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
     if (isLoading) return <p>Loading...</p>
     if (isError) return <p>{error.message}</p>
+    const featuredMovie = data?.results
 
     return (
         <Container className="h-[70vh]">
