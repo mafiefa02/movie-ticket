@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 import Container from "@/components/layout/container";
@@ -42,8 +43,10 @@ export default function Hero({
             {movie.description}
           </P>
           <div className="mt-8 flex w-full flex-row items-center gap-px sm:gap-4">
-            <Button className="sm:w-1/2">Nonton Sekarang</Button>
-            <Button className="justify-start sm:w-1/2" variant="link">
+            <Button disabled className="sm:w-1/2">
+              Nonton Sekarang
+            </Button>
+            <Button disabled className="justify-start sm:w-1/2" variant="link">
               Lihat Sinopsis
             </Button>
           </div>
@@ -81,9 +84,11 @@ export default function Hero({
               {movie.description}
             </P>
             <div className="mt-8 flex w-full flex-row items-center gap-px sm:gap-4">
-              <Button className="sm:w-1/2">Nonton Sekarang</Button>
+              <Button className="sm:w-1/2" asChild>
+                <Link href={`/movies/${movie.title}`}>Nonton Sekarang</Link>
+              </Button>
               <Button className="justify-start sm:w-1/2" variant="link">
-                Lihat Sinopsis
+                <Link href={`/movies/${movie.title}`}>Lihat Sinopsis</Link>
               </Button>
             </div>
           </div>
