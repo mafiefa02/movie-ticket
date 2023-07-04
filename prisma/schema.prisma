@@ -39,33 +39,9 @@ model Movie {
   poster_url   String
   age_rating   Int
   ticket_price Float
-  showtimes    Showtime[]
+  tickets      Ticket[]
 
-  @@unique([title, release_date])
-}
-
-model Theater {
-  id     String   @id @default(cuid())
-  name    String
-  showtimes Showtime[]
-}
-
-model Showtime {
-  id String @id @default(cuid())
-  movies Movie[]
-  dateTime String
-  theater Theater @relation(fields: [theaterId], references: [id], onDelete: Cascade)
-  theaterId String
-  tickets Ticket[]
-}
-
-model Ticket {
-  id String @id @default(cuid())
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
-  showtime Showtime @relation(fields: [showtimeId], references: [id], onDelete: Cascade)
-  showtimeId String
-  seatNumber String
+  @@unique([title])
 }
 
 model Session {
@@ -74,6 +50,18 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Ticket {
+  id      String @id @default(cuid())
+  user    User   @relation(fields: [userEmail], references: [email], onDelete: Cascade)
+  userEmail  String
+  movie   Movie  @relation(fields: [movieTitle], references: [title], onDelete: Cascade)
+  movieTitle String
+  seats  String[]
+  date String
+  time String
+  theater String
 }
 
 model User {
