@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 import { H4, P } from "@/components/typography";
@@ -19,20 +22,22 @@ export default function MovieCard({ movie }: { movie: Movie }) {
   return (
     <HoverCard key={movie.title}>
       <HoverCardTrigger asChild>
-        <Card className="relative w-max overflow-hidden transition-transform hover:-translate-y-3 hover:rotate-1 hover:scale-105">
-          <Badge className="absolute left-2 top-2 text-xs opacity-75">
-            Usia {movie.age_rating}+
-          </Badge>
-          <Image
-            src={movie.poster_url}
-            alt={movie.title}
-            width={isMobile ? 200 : 300}
-            height={isMobile ? 300 : 450}
-            style={{ objectFit: "cover" }}
-            placeholder="blur"
-            blurDataURL={"process.env.BLUR_DATA_URL"}
-          />
-        </Card>
+        <Link href={`/movies/${movie.title}`}>
+          <Card className="relative w-max overflow-hidden transition-transform hover:-translate-y-3 hover:rotate-1 hover:scale-105">
+            <Badge className="absolute left-2 top-2 text-xs opacity-75">
+              Usia {movie.age_rating}+
+            </Badge>
+            <Image
+              src={movie.poster_url}
+              alt={movie.title}
+              width={isMobile ? 200 : 300}
+              height={isMobile ? 300 : 450}
+              style={{ objectFit: "cover" }}
+              placeholder="blur"
+              blurDataURL={"process.env.BLUR_DATA_URL"}
+            />
+          </Card>
+        </Link>
       </HoverCardTrigger>
       <HoverCardContent className="h-max w-max">
         <div className="relative min-w-[300px]">
@@ -52,7 +57,9 @@ export default function MovieCard({ movie }: { movie: Movie }) {
         <div className="-mt-5 flex w-full flex-col gap-4 p-4">
           <P className="line-clamp-3 max-w-sm">{movie.description}</P>
           <div className="flex flex-row items-center gap-2">
-            <Button className="w-full">Nonton Sekarang</Button>
+            <Button className="w-full" asChild>
+              <Link href={`/movies/${movie.title}`}>Nonton Sekarang</Link>
+            </Button>
           </div>
         </div>
       </HoverCardContent>

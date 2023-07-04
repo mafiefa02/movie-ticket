@@ -32,25 +32,42 @@ model Account {
 }
 
 model Movie {
-  id           Int          @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   title        String
-  description  String       @db.Text
+  description  String     @db.Text
   release_date String
   poster_url   String
   age_rating   Int
   ticket_price Float
-  seats        SeatNumber[]
-  orders       Order[]
+  showtimes    Showtime[]
 
   @@unique([title, release_date])
 }
 
-model SeatNumber {
-  id        Int     @id @default(autoincrement())
-  available Boolean
-  movie     Movie   @relation(fields: [movieId], references: [id])
-  movieId   Int
-  orders    Order[]
+model Showtime {
+  id      String   @id @default(cuid())
+  date    DateTime
+  movie   Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  movieId Int
+  tickets Ticket[]
+}
+
+model Seat {
+  id         Int     @id @default(autoincrement())
+  seatNumber String
+  status     String  @default("AVAILABLE")
+  ticket     Ticket? @relation("TicketToSeat", fields: [ticketId], references: [id], onDelete: Cascade)
+  ticketId   String?
+}
+
+model Ticket {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  seats      Seat[]   @relation("TicketToSeat")
+  showtime   Showtime @relation(fields: [showtimeId], references: [id], onDelete: Cascade)
+  showtimeId String
+  createdAt  DateTime @default(now())
 }
 
 model Session {
@@ -59,17 +76,6 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Order {
-  id        String     @id @default(cuid())
-  userId    String
-  movieId   Int
-  seatId    Int
-  createdAt DateTime   @default(now())
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  movie     Movie      @relation(fields: [movieId], references: [id])
-  seat      SeatNumber @relation(fields: [seatId], references: [id])
 }
 
 model User {
@@ -81,7 +87,7 @@ model User {
   balance       Float     @default(0)
   accounts      Account[]
   sessions      Session[]
-  orders        Order[]
+  tickets       Ticket[]
 }
 
 model VerificationToken {
