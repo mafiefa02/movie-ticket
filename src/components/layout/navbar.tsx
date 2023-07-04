@@ -16,21 +16,21 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-  NavigationMenuViewport,
+  NavigationMenuViewport
 } from "@/components/ui/navigation-menu";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
+  SheetTrigger
 } from "@/components/ui/sheet";
 import { useNavbar } from "@/hooks/useNavbar";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 import { cn } from "@/lib/utils";
 import {
   NavigationMenuLinkProps,
-  NavigationMenuProps,
+  NavigationMenuProps
 } from "@radix-ui/react-navigation-menu";
 
 import ThemeSwitch from "../theme-switch";
@@ -44,9 +44,8 @@ const NavbarContainer = ({ className, children, ...props }: NavbarProps) => {
   return (
     <div
       className={cn(
-        "bg-background/30 sticky top-0 z-50 w-full backdrop-blur-2xl backdrop-brightness-200 backdrop-contrast-75 transition ease-in dark:backdrop-brightness-75",
-        scrolled &&
-          "bg-background/80 border-b shadow-lg backdrop-brightness-100 backdrop-contrast-100",
+        "sticky top-0 z-50 w-full bg-white/40 backdrop-blur-sm transition ease-in dark:bg-white/10 dark:backdrop-brightness-75",
+        scrolled && "border-b shadow-lg",
         className
       )}
       {...props}

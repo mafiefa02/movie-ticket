@@ -1,4 +1,4 @@
-import { tmdbResponse } from "@/types/tmdb";
+import { tmdbMovie, tmdbMovieDetails, tmdbResponse } from "@/types/tmdb";
 import { Movie } from "@prisma/client";
 
 export async function getMovieByTitleServer(title: string) {
@@ -18,7 +18,7 @@ export async function getMovieByTitleServer(title: string) {
     return null;
   }
 
-  return res.results[0];
+  return res.results[0] as tmdbMovie;
 }
 
 export async function getMoviesServer() {
@@ -26,4 +26,21 @@ export async function getMoviesServer() {
     "https://seleksi-sea-2023.vercel.app/api/movies"
   ).then((res) => res.json());
   return movies;
+}
+
+export async function getMovieByIdServer(id: string) {
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${process.env.TMDB_API_KEY}`,
+    },
+  };
+
+  const res = await fetch(
+    "https://api.themoviedb.org/3/movie/" + id,
+    options
+  ).then((res) => res.json());
+
+  return res as tmdbMovieDetails;
 }
