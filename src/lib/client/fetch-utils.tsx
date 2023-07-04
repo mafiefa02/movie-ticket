@@ -1,7 +1,7 @@
 "use client";
 
 import { tmdbMovie, tmdbMovieDetails } from "@/types/tmdb";
-import { Movie } from "@prisma/client";
+import { Movie, Ticket } from "@prisma/client";
 
 export async function getMovieByTitleClient(title: string) {
   const data: { result: tmdbMovie } = await fetch(
@@ -22,4 +22,41 @@ export async function getMovieByIdClient(id: string) {
     `/api/movies/${id}`
   ).then((res) => res.json());
   return data.result;
+}
+
+export async function getTicketsWithTitleClient(title: string) {
+  const data: { result: Ticket[] } = await fetch(`/api/tickets/${title}`).then(
+    (res) => res.json()
+  );
+
+  return data.result;
+}
+
+interface TicketData {
+  movieTitle: string;
+  seat: string[];
+  cinemas: string;
+  date: string;
+  time: string;
+  userEmail: string;
+  price: number;
+}
+
+export async function buyTicket(data: TicketData) {
+  const submit: { result: string } = await fetch(`/api/tickets`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  }).then((res) => {
+    if (res.status === 200) {
+      return res.json();
+    }
+
+    return { result: "error" };
+  });
+
+  return submit;
 }

@@ -1,6 +1,7 @@
 "use client";
 import { MapPin } from "lucide-react";
 import moment from "moment";
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 import Container from "@/components/layout/container";
@@ -17,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { tmdbMovie } from "@/types/tmdb";
-import { Movie } from "@prisma/client";
+import { Movie, Ticket } from "@prisma/client";
 
 import OrderDetails from "./order-details";
 import SeatMaps from "./seat-maps";
@@ -28,22 +29,40 @@ interface ChooseSeatForm {
   cinemas: string;
   date: string;
   time: string;
+  userEmail: string;
+  price: number;
 }
 
 export default function ChooseSeat({
   movie,
   movieDetails,
+  tickets,
 }: {
   movie: Movie;
   movieDetails: tmdbMovie;
+  tickets: Ticket[];
 }) {
+  const { data, status } = useSession();
   const [form, setForm] = useState<ChooseSeatForm>({
     movieTitle: movie.title,
     seat: [] as string[],
     cinemas: "XVI Big Cinema Jakarta",
     date: moment().format("LL"),
     time: "10.00",
+    userEmail: data?.user.email!,
+    price: movie.ticket_price,
   });
+
+  useEffect(() => {
+    setForm({ ...form, userEmail: data?.user.email! });
+  }, [data?.user.email, form]);
+
+  const matchTicketData = tickets
+    .filter((ticket) => ticket.movieTitle === form.movieTitle)
+    .filter((ticket) => ticket.date === form.date)
+    .filter((ticket) => ticket.time === form.time)
+    .filter((ticket) => ticket.theater === form.cinemas);
+  const reservedSeats = matchTicketData.map((ticket) => ticket.seats).flat();
 
   const handleTimeChange = (time: string) => {
     setForm({ ...form, seat: [], time: time });
@@ -57,10 +76,6 @@ export default function ChooseSeat({
       setForm({ ...form, seat: [...form.seat, seat] });
     }
   };
-
-  useEffect(() => {
-    console.log(form);
-  }, [form]);
 
   return (
     <>
@@ -147,7 +162,10 @@ export default function ChooseSeat({
                 form={form}
               />
               <CardContent className="flex h-max flex-col items-start gap-20 overflow-x-scroll py-8">
-                <SeatMaps chooseSeats={handleSeatChange} />
+                <SeatMaps
+                  reservedSeats={reservedSeats}
+                  chooseSeats={handleSeatChange}
+                />
               </CardContent>
             </Card>
           </TabsContent>
@@ -159,7 +177,10 @@ export default function ChooseSeat({
                 form={form}
               />
               <CardContent className="flex h-max flex-col items-start gap-20 overflow-x-scroll py-8">
-                <SeatMaps chooseSeats={handleSeatChange} />
+                <SeatMaps
+                  reservedSeats={reservedSeats}
+                  chooseSeats={handleSeatChange}
+                />
               </CardContent>
             </Card>
           </TabsContent>
@@ -171,7 +192,10 @@ export default function ChooseSeat({
                 form={form}
               />
               <CardContent className="flex h-max flex-col items-start gap-20 overflow-x-scroll py-8">
-                <SeatMaps chooseSeats={handleSeatChange} />
+                <SeatMaps
+                  reservedSeats={reservedSeats}
+                  chooseSeats={handleSeatChange}
+                />
               </CardContent>
             </Card>
           </TabsContent>
@@ -183,7 +207,10 @@ export default function ChooseSeat({
                 form={form}
               />
               <CardContent className="flex h-max flex-col items-start gap-20 overflow-x-scroll py-8">
-                <SeatMaps chooseSeats={handleSeatChange} />
+                <SeatMaps
+                  reservedSeats={reservedSeats}
+                  chooseSeats={handleSeatChange}
+                />
               </CardContent>
             </Card>
           </TabsContent>
@@ -195,7 +222,10 @@ export default function ChooseSeat({
                 form={form}
               />
               <CardContent className="flex h-max flex-col items-start gap-20 overflow-x-scroll py-8">
-                <SeatMaps chooseSeats={handleSeatChange} />
+                <SeatMaps
+                  reservedSeats={reservedSeats}
+                  chooseSeats={handleSeatChange}
+                />
               </CardContent>
             </Card>
           </TabsContent>

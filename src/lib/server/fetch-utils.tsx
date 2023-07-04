@@ -1,3 +1,4 @@
+import { prisma } from "@/prisma";
 import { tmdbMovie, tmdbMovieDetails, tmdbResponse } from "@/types/tmdb";
 import { Movie } from "@prisma/client";
 
@@ -43,4 +44,14 @@ export async function getMovieByIdServer(id: string) {
   ).then((res) => res.json());
 
   return res as tmdbMovieDetails;
+}
+
+export async function getTicketsWithTitleServer(title: string) {
+  const tickets = await prisma.ticket.findMany({
+    where: {
+      movieTitle: title,
+    },
+  });
+
+  return tickets;
 }

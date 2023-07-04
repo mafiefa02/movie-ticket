@@ -1,3 +1,4 @@
+"use client";
 import { Calendar, Loader2Icon, MapPin, Sofa } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -8,6 +9,7 @@ import Container from "@/components/layout/container";
 import { H2 } from "@/components/typography";
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -19,6 +21,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/components/ui/toast/useToast";
+import { buyTicket } from "@/lib/client/fetch-utils";
 import { cn } from "@/lib/utils";
 import { tmdbMovie } from "@/types/tmdb";
 import { Movie } from "@prisma/client";
@@ -29,6 +33,8 @@ interface ChooseSeatForm {
   cinemas: string;
   date: string;
   time: string;
+  userEmail: string;
+  price: number;
 }
 
 export default function OrderDetails({
@@ -41,6 +47,28 @@ export default function OrderDetails({
   movieDetails: tmdbMovie;
 }) {
   const { data, status } = useSession();
+  const { toast } = useToast();
+  const handleSubmit = async (form: ChooseSeatForm) => {
+    console.log("form", form);
+    toast({
+      title: "Mohon Tunggu",
+      description: "Kami sedang memproses pembelian Anda...",
+    });
+    const response = await buyTicket(form);
+    if (!response.result) {
+      toast({
+        title: "Gagal",
+        description: "yh gagal",
+        variant: "destructive",
+      });
+    }
+    if (response.result) {
+      toast({
+        title: "Berhasil",
+        description: `Pembelian berhasil dilakukan. Sisa saldo Anda adalah ${data?.user.balance}`,
+      });
+    }
+  };
   return (
     <Container>
       <div className="flex w-full flex-col gap-2">
@@ -124,7 +152,7 @@ export default function OrderDetails({
                   >
                     {status === "loading" && (
                       <>
-                        <Loader2Icon />
+                        <Loader2Icon className="mr-2 animate-spin" />
                         Loading...
                       </>
                     )}
@@ -182,9 +210,19 @@ export default function OrderDetails({
                             Batal
                           </Button>
                         </AlertDialogCancel>
-                        <Button className="w-full sm:w-2/3" variant="default">
-                          Bayar
-                        </Button>
+                        <AlertDialogAction asChild>
+                          <Button
+                            className="w-full sm:w-2/3"
+                            variant="default"
+                            disabled={
+                              data?.user.email === undefined ||
+                              data.user.email === null
+                            }
+                            onClick={() => handleSubmit(form)}
+                          >
+                            Bayar
+                          </Button>
+                        </AlertDialogAction>
                       </AlertDialogFooter>
                     </>
                   )}
@@ -216,9 +254,11 @@ export default function OrderDetails({
                             Batal
                           </Button>
                         </AlertDialogCancel>
-                        <Button className="w-full sm:w-2/3" variant="default">
-                          Top Up
-                        </Button>
+                        <AlertDialogAction asChild>
+                          <Button className="w-full sm:w-2/3" variant="default">
+                            Top Up
+                          </Button>
+                        </AlertDialogAction>
                       </AlertDialogFooter>
                     </>
                   )}

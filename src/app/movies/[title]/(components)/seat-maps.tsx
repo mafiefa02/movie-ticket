@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Toggle } from "@/components/ui/toggle";
+import { cn } from "@/lib/utils";
 
 const RightColumn = () => {
   const seats = [];
@@ -77,9 +78,13 @@ const MiddleColumn = () => {
 
 interface ChooseSeatsProps {
   chooseSeats: (seat: string) => void;
+  reservedSeats: string[];
 }
 
-export default function SeatMaps({ chooseSeats }: ChooseSeatsProps) {
+export default function SeatMaps({
+  chooseSeats,
+  reservedSeats,
+}: ChooseSeatsProps) {
   return (
     <>
       <div className="h-max w-full min-w-[1000px] rounded-md bg-foreground px-8 py-3 text-center text-background">
@@ -93,7 +98,14 @@ export default function SeatMaps({ chooseSeats }: ChooseSeatsProps) {
                 onClick={() => chooseSeats(seat)}
                 variant={"outline"}
                 key={seat}
-                className="flex h-14 w-14 items-center justify-center rounded-md bg-white text-center text-foreground hover:bg-secondary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground dark:text-background"
+                disabled={reservedSeats.includes(seat)}
+                className={cn(
+                  `flex h-14 w-14 items-center justify-center rounded-md bg-white text-center text-foreground hover:bg-secondary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground dark:text-background`,
+                  `${
+                    reservedSeats.includes(seat) &&
+                    "bg-destructive text-destructive-foreground dark:bg-red-500 dark:text-white"
+                  }`
+                )}
               >
                 {seat}
               </Toggle>
@@ -107,7 +119,14 @@ export default function SeatMaps({ chooseSeats }: ChooseSeatsProps) {
                 onClick={() => chooseSeats(seat)}
                 variant={"outline"}
                 key={seat}
-                className="flex h-14 w-14 items-center justify-center rounded-md bg-white text-center text-foreground hover:bg-secondary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground dark:text-background"
+                disabled={reservedSeats.includes(seat)}
+                className={cn(
+                  `flex h-14 w-14 items-center justify-center rounded-md bg-white text-center text-foreground hover:bg-secondary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground dark:text-background`,
+                  `${
+                    reservedSeats.includes(seat) &&
+                    "bg-destructive text-destructive-foreground dark:bg-red-500 dark:text-white"
+                  }`
+                )}
               >
                 {seat}
               </Toggle>
@@ -121,7 +140,14 @@ export default function SeatMaps({ chooseSeats }: ChooseSeatsProps) {
                 onClick={() => chooseSeats(seat)}
                 variant={"outline"}
                 key={seat}
-                className="flex h-14 w-14 items-center justify-center rounded-md bg-white text-center text-foreground hover:bg-secondary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground dark:text-background"
+                disabled={reservedSeats.includes(seat)}
+                className={cn(
+                  `flex h-14 w-14 items-center justify-center rounded-md bg-white text-center text-foreground hover:bg-secondary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground dark:text-background`,
+                  `${
+                    reservedSeats.includes(seat) &&
+                    "bg-destructive text-destructive-foreground dark:bg-red-500 dark:text-white"
+                  }`
+                )}
               >
                 {seat}
               </Toggle>

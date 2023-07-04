@@ -6,6 +6,7 @@ import { H1, P } from "@/components/typography";
 import {
   getMovieByTitleServer,
   getMoviesServer,
+  getTicketsWithTitleServer,
 } from "@/lib/server/fetch-utils";
 
 import Backdrop from "./(components)/backdrop";
@@ -31,6 +32,10 @@ export default async function Movies({
 
   const movieDetails = await getMovieByTitleServer(movie.title);
   if (!movieDetails) return notFound();
+
+  const tickets = await getTicketsWithTitleServer(
+    decodeURIComponent(params.title)
+  );
 
   return (
     <>
@@ -66,7 +71,7 @@ export default async function Movies({
           </div>
         </div>
       </Container>
-      <ChooseSeat movie={movie} movieDetails={movieDetails} />
+      <ChooseSeat tickets={tickets} movie={movie} movieDetails={movieDetails} />
     </>
   );
 }
