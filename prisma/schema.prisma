@@ -44,30 +44,28 @@ model Movie {
   @@unique([title, release_date])
 }
 
+model Theater {
+  id     String   @id @default(cuid())
+  name    String
+  showtimes Showtime[]
+}
+
 model Showtime {
-  id      String   @id @default(cuid())
-  date    DateTime
-  movie   Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
-  movieId Int
+  id String @id @default(cuid())
+  movies Movie[]
+  dateTime String
+  theater Theater @relation(fields: [theaterId], references: [id], onDelete: Cascade)
+  theaterId String
   tickets Ticket[]
 }
 
-model Seat {
-  id         Int     @id @default(autoincrement())
-  seatNumber String
-  status     String  @default("AVAILABLE")
-  ticket     Ticket? @relation("TicketToSeat", fields: [ticketId], references: [id], onDelete: Cascade)
-  ticketId   String?
-}
-
 model Ticket {
-  id         String   @id @default(cuid())
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String
-  seats      Seat[]   @relation("TicketToSeat")
-  showtime   Showtime @relation(fields: [showtimeId], references: [id], onDelete: Cascade)
+  id String @id @default(cuid())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  showtime Showtime @relation(fields: [showtimeId], references: [id], onDelete: Cascade)
   showtimeId String
-  createdAt  DateTime @default(now())
+  seatNumber String
 }
 
 model Session {
