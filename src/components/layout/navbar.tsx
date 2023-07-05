@@ -34,7 +34,7 @@ import {
 } from "@radix-ui/react-navigation-menu";
 
 import ThemeSwitch from "../theme-switch";
-import { Button, ButtonProps } from "../ui/button";
+import { Button, ButtonProps, buttonVariants } from "../ui/button";
 import UserAction from "../user-action";
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -100,7 +100,12 @@ const NavbarItems = ({ className, children, ...props }: NavbarProps) => {
   );
 };
 
-type NavbarLinkProps = LinkProps & ButtonProps & { active?: boolean };
+type NavbarLinkProps = {
+  active?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+  href: string;
+};
 const NavbarLink = ({
   className,
   children,
@@ -109,18 +114,17 @@ const NavbarLink = ({
 }: NavbarLinkProps) => {
   const active = usePathname() === href;
   return (
-    <Button
-      {...props}
-      variant={"link"}
+    <a
+      href={href}
       className={cn(
+        buttonVariants({ variant: "link" }),
         "text-foreground drop-shadow-2xl hover:cursor-pointer",
         active && "underline",
         className
       )}
-      asChild
     >
-      <Link href={href}>{children}</Link>
-    </Button>
+      {children}
+    </a>
   );
 };
 
