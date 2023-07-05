@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       },
       data: {
         balance: {
-          decrement: body.price,
+          decrement: body.price * body.seat.length,
         },
       },
     }),
@@ -36,5 +36,5 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  return NextResponse.json({ result: "Ticket purchased" }, { status: 200 });
+  return NextResponse.json({ result: createTicket }, { status: 200 });
 }

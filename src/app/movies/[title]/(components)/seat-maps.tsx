@@ -103,7 +103,7 @@ export default function SeatMaps({
                   `flex h-14 w-14 items-center justify-center rounded-md bg-white text-center text-foreground hover:bg-secondary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground dark:text-background`,
                   `${
                     reservedSeats.includes(seat) &&
-                    "bg-destructive text-destructive-foreground dark:bg-red-500 dark:text-white"
+                    "bg-destructive text-destructive-foreground dark:bg-red-500 dark:text-white dark:data-[state=on]:bg-red-500 dark:data-[state=on]:text-white data-[state=on]:bg-destructive data-[state=on]:text-destructive-foreground"
                   }`
                 )}
               >
@@ -124,7 +124,7 @@ export default function SeatMaps({
                   `flex h-14 w-14 items-center justify-center rounded-md bg-white text-center text-foreground hover:bg-secondary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground dark:text-background`,
                   `${
                     reservedSeats.includes(seat) &&
-                    "bg-destructive text-destructive-foreground dark:bg-red-500 dark:text-white"
+                    "bg-destructive text-destructive-foreground dark:bg-red-500 dark:text-white dark:data-[state=on]:bg-red-500 dark:data-[state=on]:text-white data-[state=on]:bg-destructive data-[state=on]:text-destructive-foreground"
                   }`
                 )}
               >
@@ -145,7 +145,7 @@ export default function SeatMaps({
                   `flex h-14 w-14 items-center justify-center rounded-md bg-white text-center text-foreground hover:bg-secondary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground dark:text-background`,
                   `${
                     reservedSeats.includes(seat) &&
-                    "bg-destructive text-destructive-foreground dark:bg-red-500 dark:text-white"
+                    "bg-destructive text-destructive-foreground data-[state=on]:bg-destructive data-[state=on]:text-destructive-foreground dark:bg-red-500 dark:text-white dark:data-[state=on]:bg-red-500 dark:data-[state=on]:text-white"
                   }`
                 )}
               >

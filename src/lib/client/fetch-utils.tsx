@@ -58,5 +58,5 @@ export async function buyTicket(data: TicketData) {
     return { result: "error" };
   });
 
-  return submit;
+  return submit.result;
 }

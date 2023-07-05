@@ -25,7 +25,8 @@ import { useToast } from "@/components/ui/toast/useToast";
 import { buyTicket } from "@/lib/client/fetch-utils";
 import { cn } from "@/lib/utils";
 import { tmdbMovie } from "@/types/tmdb";
-import { Movie } from "@prisma/client";
+import { Movie, Ticket } from "@prisma/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ChooseSeatForm {
   movieTitle: string;
@@ -41,13 +42,16 @@ export default function OrderDetails({
   movie,
   form,
   movieDetails,
+  setForm,
 }: {
   movie: Movie;
   form: ChooseSeatForm;
   movieDetails: tmdbMovie;
+  setForm: React.Dispatch<React.SetStateAction<ChooseSeatForm>>;
 }) {
-  const { data, status } = useSession();
+  const { data, status, update } = useSession();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const handleSubmit = async (form: ChooseSeatForm) => {
     console.log("form", form);
     toast({
@@ -55,20 +59,45 @@ export default function OrderDetails({
       description: "Kami sedang memproses pembelian Anda...",
     });
     const response = await buyTicket(form);
-    if (!response.result) {
+    if (!response) {
       toast({
-        title: "Gagal",
-        description: "yh gagal",
-        variant: "destructive",
+        title: "We failed to process your order.",
+        description: "Please try again later.",
       });
     }
-    if (response.result) {
-      toast({
-        title: "Berhasil",
-        description: `Pembelian berhasil dilakukan. Sisa saldo Anda adalah ${data?.user.balance}`,
+    if (response) {
+      setForm({ ...form, seat: [] });
+      const updateStatus = update().then((newData) => {
+        toast({
+          title: "Berhasil",
+          description: `Pembelian berhasil dilakukan. Sisa saldo Anda adalah IDR ${newData?.user.balance}`,
+        });
       });
     }
+
+    return response;
   };
+  const handleBuyTicket = useMutation({
+    mutationKey: ["buyTicket", form],
+    mutationFn: handleSubmit,
+    onSuccess: (data) => {
+      queryClient.setQueryData(["tickets", movie.title], (oldData: any) => {
+        console.log("oldData", oldData);
+        const newData = [...oldData, data];
+        console.log("newData", newData);
+        return newData;
+      });
+    },
+  });
+
+  if (handleBuyTicket.isLoading) {
+    return <Loader2Icon className="animate-spin" />;
+  }
+
+  if (handleBuyTicket.isError) {
+    return <p>Something went wrong.</p>;
+  }
+
   return (
     <Container>
       <div className="flex w-full flex-col gap-2">
@@ -218,7 +247,7 @@ export default function OrderDetails({
                               data?.user.email === undefined ||
                               data.user.email === null
                             }
-                            onClick={() => handleSubmit(form)}
+                            onClick={() => handleBuyTicket.mutate(form)}
                           >
                             Bayar
                           </Button>
