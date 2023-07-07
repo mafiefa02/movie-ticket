@@ -86,6 +86,7 @@ export default function OrderDetails({
         const newData = [...oldData, data];
         return newData;
       });
+      queryClient.invalidateQueries(["tickets"]);
     },
   });
 
