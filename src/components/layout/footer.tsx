@@ -16,16 +16,16 @@ export default function Footer() {
         <Link href={"mailto:mafiefa.business@gmail.com"}>
           <MailIcon color="#FFF" />
         </Link>
-        <Link href={"https://github.com/mafiefa02"}>
-          <Github color="#FFF" />
-        </Link>
         <Link href={"https://instagram.com/mafiefa"}>
           <Instagram color="#FFF" />
         </Link>
       </div>
-      <p className="text-xs text-white md:text-base">
+      <Link
+        href={"https://afiefabdurrahman.vercel.app"}
+        className="text-xs text-white md:text-base"
+      >
         &#169; {year} Afief Abdurrahman
-      </p>
+      </Link>
     </footer>
   );
 }
