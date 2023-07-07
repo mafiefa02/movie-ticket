@@ -2,6 +2,7 @@ import "./globals.css";
 
 import { Inter } from "next/font/google";
 
+import Footer from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/toast/toaster";
 import { NextAuthProvider } from "@/context/auth-provider";
 import { QueryProvider } from "@/context/query-provider";
@@ -27,6 +28,7 @@ export default function RootLayout({
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {children}
               <Toaster />
+              <Footer />
             </ThemeProvider>
           </QueryProvider>
         </NextAuthProvider>
