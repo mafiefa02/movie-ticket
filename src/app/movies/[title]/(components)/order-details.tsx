@@ -20,9 +20,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/toast/useToast";
-import { buyTicket } from "@/lib/client/fetch-utils";
+import { buyTicket, topUpBalanceClient } from "@/lib/client/fetch-utils";
 import { cn } from "@/lib/utils";
 import { tmdbMovie } from "@/types/tmdb";
 import { Movie, Ticket } from "@prisma/client";
@@ -52,8 +53,8 @@ export default function OrderDetails({
   const { data, status, update } = useSession();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [topUpAmount, setTopUpAmount] = React.useState(0);
   const handleSubmit = async (form: ChooseSeatForm) => {
-    console.log("form", form);
     toast({
       title: "Mohon Tunggu",
       description: "Kami sedang memproses pembelian Anda...",
@@ -82,9 +83,7 @@ export default function OrderDetails({
     mutationFn: handleSubmit,
     onSuccess: (data) => {
       queryClient.setQueryData(["tickets", movie.title], (oldData: any) => {
-        console.log("oldData", oldData);
         const newData = [...oldData, data];
-        console.log("newData", newData);
         return newData;
       });
     },
@@ -97,6 +96,39 @@ export default function OrderDetails({
   if (handleBuyTicket.isError) {
     return <p>Something went wrong.</p>;
   }
+
+  const handleTopUp = async (amount: number, email: string) => {
+    const response = await topUpBalanceClient(amount, email);
+    toast({
+      title: "Mohon Tunggu",
+      description: "Kami sedang memproses top up Anda...",
+    });
+    if (!response) {
+      toast({
+        title: "We failed to process your order.",
+        description: "Please try again later.",
+      });
+    }
+    if (response) {
+      update();
+      toast({
+        title: "Berhasil",
+        description: `Top up berhasil dilakukan. Sisa saldo Anda adalah IDR ${response.balance}`,
+      });
+    }
+  };
+
+  const handleRequirement = () => {
+    if (form.seat.length > 6) {
+      toast({
+        title: "Gagal",
+        description: "Anda hanya dapat membeli maksimal 6 tiket.",
+      });
+      return;
+    }
+
+    handleBuyTicket.mutate(form);
+  };
 
   return (
     <Container>
@@ -247,7 +279,7 @@ export default function OrderDetails({
                               data?.user.email === undefined ||
                               data.user.email === null
                             }
-                            onClick={() => handleBuyTicket.mutate(form)}
+                            onClick={() => handleRequirement()}
                           >
                             Bayar
                           </Button>
@@ -284,9 +316,59 @@ export default function OrderDetails({
                           </Button>
                         </AlertDialogCancel>
                         <AlertDialogAction asChild>
-                          <Button className="w-full sm:w-2/3" variant="default">
-                            Top Up
-                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                className="w-full sm:w-2/3"
+                                variant="default"
+                              >
+                                Top Up
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Top Up Saldo
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Pilih jumlah top up yang Anda inginkan. Anda
+                                  harus melakukan top up minimal IDR{" "}
+                                  {form.seat.length * movie.ticket_price -
+                                    data?.user.balance!}
+                                  .
+                                </AlertDialogDescription>
+                                <Separator />
+                              </AlertDialogHeader>
+                              <Input
+                                placeholder="Masukkan jumlah top up saldo yang Anda inginkan"
+                                type="number"
+                                onChange={(e) =>
+                                  setTopUpAmount(Number(e.target.value))
+                                }
+                              />
+                              <AlertDialogFooter>
+                                <AlertDialogCancel asChild>
+                                  <Button
+                                    variant={"outline"}
+                                    className="w-full sm:w-1/3"
+                                  >
+                                    Batal
+                                  </Button>
+                                </AlertDialogCancel>
+                                <AlertDialogAction asChild>
+                                  <Button
+                                    className="w-full sm:w-2/3"
+                                    variant="default"
+                                    onClick={() =>
+                                      handleTopUp(topUpAmount, form.userEmail)
+                                    }
+                                  >
+                                    Konfirmasi
+                                  </Button>
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </>

@@ -16,21 +16,21 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-  NavigationMenuViewport
+  NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger
+  SheetTrigger,
 } from "@/components/ui/sheet";
 import { useNavbar } from "@/hooks/useNavbar";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions";
 import { cn } from "@/lib/utils";
 import {
   NavigationMenuLinkProps,
-  NavigationMenuProps
+  NavigationMenuProps,
 } from "@radix-ui/react-navigation-menu";
 
 import ThemeSwitch from "../theme-switch";
@@ -77,7 +77,8 @@ const NavbarBrand = ({
   ...props
 }: NavbarBrandProps) => {
   return (
-    <span
+    <a
+      href="/"
       className={cn(
         "flex flex-row items-center gap-4 drop-shadow-sm hover:cursor-pointer md:w-1/4",
         className
@@ -85,7 +86,7 @@ const NavbarBrand = ({
     >
       <Image {...props} alt={alt} />
       {children}
-    </span>
+    </a>
   );
 };
 
@@ -221,7 +222,7 @@ export default function Navbar() {
             </NavbarBrand>
             <NavbarItems>
               <NavbarLink href="/">Home</NavbarLink>
-              <NavbarLink href="/now-playing">Now Playing</NavbarLink>
+              <NavbarLink href="/tickets">Tickets</NavbarLink>
             </NavbarItems>
             <NavbarSideMenu>
               <ThemeSwitch />
@@ -248,7 +249,7 @@ export default function Navbar() {
                 </SheetHeader>
                 <NavbarContent className="flex-col items-start gap-4 px-0">
                   <NavbarLink href="/">Home</NavbarLink>
-                  <NavbarLink href="/now-playing">Now Playing</NavbarLink>
+                  <NavbarLink href="/tickets">Tickets</NavbarLink>
                   <NavbarDropdown
                     tabIndex={0}
                     orientation="vertical"

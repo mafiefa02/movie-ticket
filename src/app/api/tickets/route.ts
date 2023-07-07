@@ -2,9 +2,25 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { prisma } from "@/prisma";
 
+export async function GET(req: NextRequest) {
+  const tickets = await prisma.ticket.findMany({
+    include: {
+      user: true,
+    },
+  });
+
+  if (!tickets) {
+    return NextResponse.json(
+      { result: "Something went wrong" },
+      { status: 500 }
+    );
+  }
+
+  return NextResponse.json({ result: tickets }, { status: 200 });
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  console.log(body);
 
   const [createTicket, updateBalance] = await prisma.$transaction([
     prisma.ticket.create({

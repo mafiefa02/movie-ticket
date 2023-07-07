@@ -60,3 +60,15 @@ export async function buyTicket(data: TicketData) {
 
   return submit.result;
 }
+
+export async function topUpBalanceClient(amount: number, email: string) {
+  const res = await fetch(`/api/balance/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ amount, email }),
+  }).then((res) => res.json());
+
+  return res;
+}
