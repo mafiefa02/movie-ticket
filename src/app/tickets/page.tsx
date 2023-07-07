@@ -13,5 +13,9 @@ async function fetchTickets() {
 export default async function TicketsPage() {
   const tickets = await fetchTickets();
   const movies = await getMoviesServer();
-  return <TicketItem movies={movies} tickets={tickets} />;
+  return (
+    <div className="min-h-screen">
+      <TicketItem movies={movies} tickets={tickets} />
+    </div>
+  );
 }
