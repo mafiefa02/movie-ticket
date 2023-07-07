@@ -250,18 +250,6 @@ export default function Navbar() {
                 <NavbarContent className="flex-col items-start gap-4 px-0">
                   <NavbarLink href="/">Home</NavbarLink>
                   <NavbarLink href="/tickets">Tickets</NavbarLink>
-                  <NavbarDropdown
-                    tabIndex={0}
-                    orientation="vertical"
-                    trigger="Profile"
-                  >
-                    <NavbarDropdownLink href="/profile#watch-history">
-                      Watch History
-                    </NavbarDropdownLink>
-                    <NavbarDropdownLink href="/profile#topup-history">
-                      Topup History
-                    </NavbarDropdownLink>
-                  </NavbarDropdown>
                 </NavbarContent>
               </SheetContent>
             </Sheet>

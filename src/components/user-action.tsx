@@ -44,16 +44,6 @@ export default function UserAction({
                 </Avatar>
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <Link href={"/profile"} passHref>
-                  <NavigationMenuLink
-                    className={cn(
-                      navigationMenuTriggerStyle(),
-                      "w-full justify-start whitespace-nowrap"
-                    )}
-                  >
-                    Profile
-                  </NavigationMenuLink>
-                </Link>
                 <Link href={""} onClick={() => signOut()}>
                   <NavigationMenuLink
                     className={cn(
